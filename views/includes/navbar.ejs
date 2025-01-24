@@ -9,7 +9,15 @@
           <a class="nav-link " href="/">Home</a>
           <a class="nav-link" href="/listings">All listings</a>
           <a class="nav-link" href="/listings/new">Add new listings</a>
-        
+        </div>
+        <div class="navbar-nav ms-auto">
+         <% if(!currUser) {%>
+          <a class="nav-link " href="/signup">Sign Up</a>  <%# jab user logged in nahi hai uss case ne signup/login dikaya else me log out dikahyenge     %>
+          <a class="nav-link" href="/login">Log in</a>     <%# ab ayha req.user directly nhi le sakte toh unhe pp.js me locals ke through access karwayenge %>
+          <%}%>
+          <% if(currUser) {%>
+          <a class="nav-link" href="/logout">logout</a>
+          <%}%>
         </div>
       </div>
     </div>

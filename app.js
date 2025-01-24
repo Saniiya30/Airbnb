@@ -8,8 +8,13 @@ const methodOverride = require("method-override");
 const ejsMate=require("ejs-mate");
 const wrapAsync= require("./util/wrapAsync.js");
 const ExpressError= require("./util/ExpressError.js");
-const {listingSchema}=require("./schema.js")
+const {listingSchema,reviewSchema}=require("./schema.js")
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
+const session= require("express-session");
+const flash= require("connect-flash");
+const passport= require("passport");
+const LocalStrategy= require("passport-local");
+const User= require("./models/user.js");
 
 const Review= require("./models/review.js");
 app.set("view engine","ejs");
@@ -18,6 +23,13 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
+
+
+
+
+const listingRouter= require("./routes/listing.js");
+const reviewRouter= require("./routes/review.js");
+const userRouter= require("./routes/user.js");
 
 
 main()
@@ -29,90 +41,56 @@ main()
 async function main(){
     await mongoose.connect(MONGO_URL);
 }
-
+const sessionOptions={      // aise likh sakte hai taaki aur koi change karna ho toh yahi kar paaye 
+    secret:"priyanshu30",
+    resave:false,
+     saveUninitialized:true,
+     cookie:{
+        expires:Date.now()+7*24*60*60*1000,   // aaj se 7 din ke baad expire hinge just like github
+        maxAge:7*24*60*60*1000,
+        httpOnly:true,  // secure(cross scripting error ke liye )
+     },
+};
 app.get("/",(req,res)=>{
-res.send("Hi I am root");
-});
+    res.send("Hi I am root");
+    });
 
-const validateListing=(req,res,next)=>{
-    let {error} =listingSchema.validate(req.body);
-    
-    if(error){
-        let errMsg=error.details.map((el)=>el.message).join(",")
-        throw new ExpressError(400,errMsg);
-    }else{
-        next();
-    }
-}
-//INDEX ROUTE 
+app.use(session(sessionOptions));
+app.use(flash());
 
-app.get("/listings",wrapAsync(async (req,res)=>{
-  const allListings= await Listing.find({})
-     res.render("listings/index.ejs",{allListings});
-    }));
-    //NEW ROUTE
+//passport bhi session ko use karega kyunki agar use ek hi broswer pe hai bas tab change kar raha hai tab usse wapas login/signup na karna pade
+ 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
 
-app.get("/listings/new",(req,res)=>{
-    res.render("listings/new.ejs");
-  });
+passport.serializeUser(User.serializeUser());  //user se related info ko store karwana is serialize 
+passport.deserializeUser(User.deserializeUser()); //user se related info ko unstore karwana is deserialize
 
-//SHOW ROUTE
-app.get("/listings/:id",wrapAsync(async(req,res)=>{
-   let {id}=req.params;
-  const listing= await Listing.findById(id);
-  res.render("listings/show.ejs",{listing});
-}));
-//CREATE ROUTE
-app.post("/listings",validateListing,wrapAsync(async(req,res,next)=>{
-  
-        // if(!req.body.listing){
-        //     throw new ExpressError(404,"send valid data for listing");
-        // }
-        const newListing=new Listing(req.body.listing);
-        console.log(newListing);
-        await newListing.save();
-        res.redirect("/listings");
-})
-);
+app.use((req,res,next)=>{
+    res.locals.success=req.flash("success");
+    res.locals.error=req.flash("error");
+    res.locals.currUser=req.user;  //req.user ko ejs me direct acces n hi kar paate hai toh local middleware ke through access karenmge
+    next(); //// next ko call karna mat bhoolna warna issi middleware pe stuck reh jaoge
+});// iss flash ke baad index pe jayega kyuki listing pe redirect ho raha hai
 
-//EDIT ROUTE 
-app.get("/listings/:id/edit",wrapAsync(async(req,res)=>{
-    let {id}=req.params;
-    const listing= await Listing.findById(id);
 
-    
-    res.render("listings/edit.ejs", { listing });
-}));
-//Update route
-app.patch("/listings/:id",validateListing,wrapAsync(async (req,res)=>{
-    let {id}=req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
+//demo user to check the login/signup thing
+// app.get("/demoUser",async(req,res)=>{
+//     let user= new User({
+//         email:"saniya@gmail.com",
+//         username:"saniya"
+//     });
 
-    res.redirect(`/listings/${id}`);
-    
-}));
-//DELETE ROUTE
-app.delete("/listings/:id", wrapAsync(async(req,res)=>{
-    let {id}=req.params;
-   let deletedListing= await Listing.findByIdAndDelete(id);
-   res.redirect("/listings");
+//     let registerdUser= await User.register(user,"priyanshu30"); // register is a static method which store your user and its passsword
+//     res.send(registerdUser);                                       // register also checks whether usernamw is unique or not
+// })                                    
 
-}));
-//REVIEWS
-//POST ROUTE
-app.post("/listings/:id/reviews",async(req,res)=>{
-   let listing=await Listing.findById(req.params.id);
-   let newReview= new Review(req.body.review);
-   listing.reviews.push(newReview);
 
-  await newReview.save();
-  await listing.save();
+app.use("/listings",listingRouter);
+app.use("/listings/:id/reviews",reviewRouter);
+app.use("/",userRouter);
 
-//   console.log("new rewviw saved");
-//   res.send("new review saved");
-
-res.redirect(`/listings/${listing._id}`);
-});
 //check listing
 
 // app.get("/testListing",async (req,res)=>{

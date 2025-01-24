@@ -1,0 +1,16 @@
+<%if(success && success.length){ %>                   <%# success is the array toh agar woh check karenge tab bhi uppar
+                                                           khali template show hoga toh we have to make sure ki success li length should be greater then 0  %>
+    <div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
+        <%=success%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<%}%>
+
+
+<%if(error && error.length){ %> 
+
+    <div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
+        <%=error%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<%}%>

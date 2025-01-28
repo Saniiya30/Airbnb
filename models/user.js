@@ -11,6 +11,7 @@ const userSchema = new Schema({
 });
 
 
+
 userSchema.plugin(passportLocalMongoose); // apne aap ek username and hashed password generate kardega in schema also salting bhi 
 
 module.exports= mongoose.model('User',userSchema);

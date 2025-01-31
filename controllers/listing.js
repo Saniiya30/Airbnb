@@ -47,14 +47,21 @@ module.exports.showListing= async(req,res)=>{
       req.flash("error","Listing not found");
       res.redirect("/listings");
   }
-    
-    res.render("listings/edit.ejs", { listing });
+    // let  OriginalImageUrl=listing.image.url;
+    // OriginalImageUrl=OriginalImageUrl.replace("/upload","/upload/h_300,w_250,c_fill");
+    res.render("listings/edit.ejs", { listing});
 };
 
 module.exports.updateListing=async (req,res)=>{
     let {id}=req.params;
     
-    await Listing.findByIdAndUpdate(id,{...req.body.listing});
+    let listing=await Listing.findByIdAndUpdate(id,{...req.body.listing}); // yaha iamge ko chhodke sab edit hoga
+    if(typeof req.file!="undefined"){
+        let url=req.file.path;       //maan lete hai iamge me koi nayi iamge nahi daali toh khali backend ke pass jayefa
+      let filename=req.file.filename; // uss case me undefined value aayegi
+    listing.image={url,filename};    //toh if condtion check kar rahi hai ki agar koi file req ke andar exists karti hai tabki andar ka code chalega
+    await listing.save();              //file exist nahi karti toh undefined aayegaa uat javascript me ye implement karne ke liye hum typeOf use karte hai
+    }
     req.flash("success"," Listing Updated");
     res.redirect(`/listings/${id}`);
 };

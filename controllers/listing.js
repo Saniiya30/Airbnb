@@ -48,22 +48,41 @@ module.exports.showListing= async(req,res)=>{
       res.redirect("/listings");
   }
     
-    res.render("listings/edit.ejs", { listing});
+    res.render("listings/edit.ejs", {listing});
+
 };
 
-module.exports.updateListing=async (req,res)=>{
-    let {id}=req.params;
+// module.exports.updateListing=async (req,res)=>{
+//     let {id}=req.params;
     
-    let listing=await Listing.findByIdAndUpdate(id,{...req.body.listing}); // yaha image ko chhodke sab edit hoga
-    if(typeof req.file!="undefined"){
-        let url=req.file.path;       //maan lete hai iamge me koi nayi iamge nahi daali toh khali backend ke pass jayefa
-      let filename=req.file.filename; // uss case me undefined value aayegi
-    listing.image={url,filename};    //toh if condtion check kar rahi hai ki agar koi file req ke andar exists karti hai tabki andar ka code chalega
-    await listing.save();              //file exist nahi karti toh undefined aayegaa uat javascript me ye implement karne ke liye hum typeOf use karte hai
-    }
-    req.flash("success"," Listing Updated");
-    res.redirect(`/listings/${id}`);
+//     await Listing.findByIdAndUpdate(id,{...req.body.listing}); // yaha image ko chhodke sab edit hoga
+//     req.flash("success"," Listing Updated");
+//     res.redirect(`/listings/${id}`);
+// };
+module.exports.updateListing = async (req, res) => {
+  let { id } = req.params;
+
+  console.log(req.body); // Debugging: check what data is coming in
+
+  const listing = await Listing.findById(id);
+  if (!listing) {
+      req.flash("error", "Listing not found");
+      return res.redirect("/listings");
+  }
+
+  // Update text fields
+  await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+
+  // Handle image update if a new file is uploaded
+  if (typeof req.file!="undefined") {
+      listing.image = { url: req.file.path, filename: req.file.filename };
+      await listing.save();
+  }
+
+  req.flash("success", "Listing Updated");
+  res.redirect(`/listings/${id}`);
 };
+
 
 module.exports.destoryListing=async(req,res)=>{
     let {id}=req.params;

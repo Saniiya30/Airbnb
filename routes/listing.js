@@ -18,7 +18,8 @@ const upload=multer({storage});     //kisi ek folder me upload karwa lenge saari
 .get(wrapAsync(listingController.index))//(FOR INDEX)(yaha ka sara kaam ab controllers me hoga as a backend functionalty)
 .post
  (isLoggedIn,
-  upload.single("listing[image]"),validateListing,wrapAsync
+  upload.single("listing[image]"),
+  validateListing,wrapAsync
   (listingController.createListing));//(CREATE ROUTE)
 
 
@@ -31,7 +32,7 @@ const upload=multer({storage});     //kisi ek folder me upload karwa lenge saari
     
     router.route("/:id")
     .get(wrapAsync(listingController.showListing))//SHOW ROUTE
-    .patch(isLoggedIn,isOwner ,validateListing,wrapAsync(listingController.updateListing))//UPDATE ROUTE
+    .patch(isLoggedIn,isOwner,upload.single("listing[image]"),validateListing,wrapAsync(listingController.updateListing))//UPDATE ROUTE
     .delete( isLoggedIn,isOwner,wrapAsync(listingController.destoryListing));//DELETE ROUTE
   
   //EDIT ROUTE 

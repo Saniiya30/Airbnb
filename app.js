@@ -57,9 +57,9 @@ const sessionOptions={      // aise likh sakte hai taaki aur koi change karna ho
         httpOnly:true,  // secure(cross scripting error ke liye )
      },
 };
-app.get("/",(req,res)=>{
-    res.send("Hi I am root");
-    });
+// app.get("/",(req,res)=>{
+//     res.send("Hi I am root");
+//     });
 
 app.use(session(sessionOptions));
 app.use(flash());

@@ -89,8 +89,9 @@
             </form>
             <% } %>
            
-            <p><b>All Reviews</b></p>
+            <% if(listing.reviews.length >0) {  %>
               <div class="row">
+                <p><b>All Reviews</b></p>
                 <% for(review of listing.reviews) { %>
              <div class="card col-5 ms-3 mb-3">
                 <div class="card-body">
@@ -107,6 +108,7 @@
              </div>
                <% } %>
             </div>
+            <% } %>
         </div>
     </div>
         

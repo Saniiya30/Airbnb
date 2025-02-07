@@ -25,6 +25,7 @@ module.exports.showListing= async(req,res)=>{
  };
 
  module.exports.createListing=async(req,res,next)=>{ 
+    console.log(req.body);
     let url=req.file.path;
     let filename=req.file.filename;
   
@@ -35,10 +36,30 @@ module.exports.showListing= async(req,res)=>{
         url,
         filename,
     };
+   
     await newListing.save();
     req.flash("success","New Listing created");
     res.redirect("/listings");
  };
+
+ module.exports.renderCategory = async (req, res) => {
+    try {
+        const category = req.params.category;
+        const allListings = await Listing.find({ category });
+
+        if (!allListings.length) {
+            req.flash("error", "No listings found in this category.");
+            return res.redirect("/listings");  
+        }
+
+        res.render("listings/category.ejs", { allListings, category });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");  
+    }
+};
+
+
 
  module.exports.renderEditForm=async(req,res)=>{
     let {id}=req.params;

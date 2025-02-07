@@ -37,7 +37,7 @@
        </div>
    
        <div class="row">
-        <div class="mb-3 col-md-4">
+          <div class="mb-3 col-md-4">
             <label for="price" class="form-label">Price</label>
             <input 
             name="listing[price]" 
@@ -46,9 +46,9 @@
              class="form-control" required/>
              <div class="valid-feedback">Looks good!!</div>
             <div class="invalid-feedback">Price should be valid</div>
-           </div>
+          </div>
 
-           <div class="mb-3 col-md-8">
+           <div class="mb-3 col-md-4">
             <label for="country" class="form-label">Country</label>
             <input 
             name="listing[country]" 
@@ -57,7 +57,23 @@
             class="form-control" required/>
             <div class="valid-feedback">Looks good!!</div>
             <div class="invalid-feedback">Country name should be valid</div>
-        </div>      
+            </div>   
+            <div class="mb-3 col-md-4">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" name="listing[category]" required>
+                    <option value="" disabled>Choose...</option>
+                    <option value="Mountains" <%= listing.category === "Mountains" ? "selected" : "" %>>Mountains</option>
+                    <option value="Beach" <%= listing.category === "Beach" ? "selected" : "" %>>Beach</option>
+                    <option value="Boats" <%= listing.category === "Boats" ? "selected" : "" %>>Boats</option>
+                    <option value="Amazing pools" <%= listing.category === "Amazing pools" ? "selected" : "" %>>Amazing pools</option>
+                    <option value="Iconic Cities" <%= listing.category === "Iconic Cities" ? "selected" : "" %>>Iconic Cities</option>
+                    <option value="Arctic" <%= listing.category === "Arctic" ? "selected" : "" %>>Arctic</option>
+                    <option value="Camping" <%= listing.category === "Camping" ? "selected" : "" %>>Camping</option>
+                    <option value="Other" <%= listing.category === "Other" ? "selected" : "" %>>Other</option>
+                </select>
+                <div class="valid-feedback">Looks good!!</div>
+                <div class="invalid-feedback">Please select a valid category</div>
+            </div>   
        </div>
        
         

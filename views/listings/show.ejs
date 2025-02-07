@@ -12,6 +12,7 @@
                     <i>Owned by:-<%= listing.owner.username%></i>
                     <br>
                     <%= listing.description%> <br>
+                    <%=listing.category%><br>
                     &#8377;<%= listing.price?.toLocaleString("en-IN") ?? "N/A" %><br>
                     <%= listing.location%> <br>
                     <%= listing.country%>

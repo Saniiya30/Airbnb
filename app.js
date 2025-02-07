@@ -2,8 +2,6 @@ if(process.env.NODE_ENV != "production"){
     require("dotenv").config();
 }
 
-
-
 const express=require("express");
 const app= express();
 
@@ -14,7 +12,7 @@ const methodOverride = require("method-override");
 const ejsMate=require("ejs-mate");
 const wrapAsync= require("./util/wrapAsync.js");
 const ExpressError= require("./util/ExpressError.js");
-const {listingSchema,reviewSchema}=require("./schema.js")
+const {listingSchema,reviewSchema}=require("./schema.js");
 const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
 const session= require("express-session");
 const flash= require("connect-flash");
@@ -29,8 +27,6 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.engine('ejs',ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
-
-
 
 
 const listingRouter= require("./routes/listing.js");
@@ -97,6 +93,10 @@ app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
 
+
+
+
+
 //check listing
 
 // app.get("/testListing",async (req,res)=>{
@@ -129,3 +129,4 @@ app.use((err,req,res,next)=>{
 app.listen("5500",()=>{
     console.log("server is running on port 5500");
 });
+

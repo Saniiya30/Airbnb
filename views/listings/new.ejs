@@ -26,8 +26,9 @@
                <div class="valid-feedback">Looks good!!</div>
             <div class="invalid-feedback">Description should be valid</div>
         </div>
-       
-        <div  class="mb-3">
+
+         
+        <div class="mb-3">
             <lable for="image" class="form-label">Upload Listing Image</lable>
             <input 
             name="listing[image]"
@@ -45,9 +46,10 @@
                 <% // type="number" %>
                 class="form-control" required/>
                 <div class="valid-feedback">Looks good!!</div>
-            <div class="invalid-feedback">Price should be valid</div>
+                <div class="invalid-feedback">Price should be valid</div>
             </div>
-            <div class="mb-3 col-md-8">
+
+            <div class="mb-3 col-md-4">
                 <lable for="country" class="form-label">Country</lable>
                 <input 
                 name="listing[country]" 
@@ -55,10 +57,27 @@
                 type="text" 
                 class="form-control" required/>
                 <div class="valid-feedback">Looks good!!</div>
-            <div class="invalid-feedback">Country name should be valid</div>
+                <div class="invalid-feedback">Country name should be valid</div>
+            </div>
+            <div class="mb-3 col-md-4">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" name="listing[category]" required>
+                    <option selected >Choose...</option>
+                    <option value="Mountains">Mountains</option>
+                    <option value="Beach">Beach</option>
+                    <option value="Boats">Boats</option>
+                    <option value="Amazing pools">Amazing pools</option>
+                    <option value="Iconic Cities">Iconic Cities</option>
+                    <option value="Arctic">Arctic</option>
+                    <option value="Camping">Camping</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div class="valid-feedback">Looks good!!</div>
+                <div class="invalid-feedback">Please select a valid category</div>
             </div>
         </div>
-         <div  class="mb-3">
+
+          <div  class="mb-3">
             <lable for="location" class="form-label">Location</lable>
             <input
              name="listing[location]" 
@@ -70,7 +89,7 @@
             <div class="invalid-feedback">Location should be valid</div>
         </div>
         <br>
-        <button class="btn btn-dark add-btn mt-3">Add the location</button>
+        <button class="btn btn-dark add-btn mt-1">Add the location</button>
         <br><br>
     </form>
 </div>

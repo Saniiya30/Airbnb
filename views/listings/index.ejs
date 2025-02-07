@@ -39,7 +39,7 @@
       }
     </style>
     
-    <div id="filters">
+    <!-- <div id="filters">
          <div class="filter">
           <a href="/listings/Iconic Cities">
             <div><i class="fa-solid fa-mountain-city"></i></div>
@@ -102,8 +102,37 @@
             <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
           </div>
          </div>
-    </div>
+    </div> -->
+    <div id="filters">
+      <% let categories = [
+          { name: "Iconic Cities", icon: "fa-mountain-city" },
+          { name: "Mountains", icon: "fa-mountain" },
+          { name: "Amazing pools", icon: "fa-person-swimming" },
+          { name: "Camping", icon: "fa-campground" },
+          { name: "Arctic", icon: "fa-snowflake" },
+          { name: "Beach", icon: "fa-umbrella-beach" },
+          { name: "Boats", icon: "fa-sailboat" },
+          { name: "Other", icon: "fa-fan" }
+      ]; %>
+  
+      <% for (let category of categories) { %>
+          <div class="filter">
+            <a href="/listings/category/<%= encodeURIComponent(category.name) %>">
 
+                  <div><i class="fa-solid <%= category.icon %>"></i></div>
+                  <p><%= category.name %></p>
+              </a>
+          </div>
+      <% } %>
+  
+      <div class="tax-toggle">
+          <div class="form-check-reverse form-switch">
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+              <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+          </div>
+      </div>
+  </div>
+  
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for (let listing of allListings) { %>
             <a href="/listings/<%= listing._id %>" class="listing-link">

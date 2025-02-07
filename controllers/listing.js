@@ -44,7 +44,7 @@ module.exports.showListing= async(req,res)=>{
 
  module.exports.renderCategory = async (req, res) => {
     try {
-        const category = req.params.category;
+        const category = decodeURIComponent(req.params.category);
         const allListings = await Listing.find({ category });
 
         if (!allListings.length) {
@@ -58,7 +58,29 @@ module.exports.showListing= async(req,res)=>{
         res.status(500).send("Server Error");  
     }
 };
+   module.exports.renderSearch= async(req,res)=>{
+    try {
+        const { title } = req.query; // Get search term
+        let listings;
 
+        if (title) {
+            //case sensitive case
+            listings = await Listing.find({ title: { $regex: title, $options: "i" } });
+        } else {
+            listings = [];
+        }
+
+        if (listings.length === 0) {
+            req.flash("error", `No listings found for "${title}"`);
+        }
+
+        res.render("listings/search", { listings, title });
+    } catch (err) {
+        console.error(err);
+        req.flash("error", "Something went wrong. Please try again.");
+        res.redirect("/listings");
+    }
+   };
 
 
  module.exports.renderEditForm=async(req,res)=>{

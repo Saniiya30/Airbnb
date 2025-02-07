@@ -29,15 +29,20 @@ const upload=multer({storage});     //kisi ek folder me upload karwa lenge saari
     //     req.flash("error","You must be logged in to add Listings");//ab se isAuthenticated har jagah hon chahiye (edit,delete)
     //     res.redirect("/login");                                   //toh uske liye har jagah copy karte ki jagah hum isse ek middleware me pass kar denge
     // }
-
-    //category
-  router.get("/:category", listingController.renderCategory);
-
+    
+  //search
+  router.get("/search",listingController.renderSearch);
+  
     router.route("/:id")
     .get(wrapAsync(listingController.showListing))//SHOW ROUTE
     .patch(isLoggedIn,isOwner,upload.single("listing[image]"),validateListing,wrapAsync(listingController.updateListing))//UPDATE ROUTE
     .delete( isLoggedIn,isOwner,wrapAsync(listingController.destoryListing));//DELETE ROUTE
   
+    //category
+    router.get("/category/:category", wrapAsync(listingController.renderCategory));
+
+   
+    
   //EDIT ROUTE 
   router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEditForm));
   

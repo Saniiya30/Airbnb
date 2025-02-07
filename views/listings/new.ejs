@@ -6,7 +6,7 @@
     <h3>Create a new Listing</h3>
     <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
         <div  class="mb-3">
-            <lable for="title" class="form-label">Title</lable>
+            <label for="title" class="form-label">Title</label>
             <input 
             name="listing[title]" 
             placeholder="Add a catchy title"
@@ -18,7 +18,7 @@
             <div class="invalid-feedback">Tilte should be valid</div>
         </div>
         <div  class="mb-3">
-            <lable for="description" class="form-label">Description</lable>
+            <label for="description" class="form-label">Description</label>
             <textarea 
                name="listing[description]" 
                type="text"
@@ -29,7 +29,7 @@
 
          
         <div class="mb-3">
-            <lable for="image" class="form-label">Upload Listing Image</lable>
+            <label for="image" class="form-label">Upload Listing Image</label>
             <input 
             name="listing[image]"
      
@@ -39,7 +39,7 @@
         </div>
         <div class="row">
             <div  class="mb-3 col-md-4">
-                <lable for="price" class="form-label">Price</lable>
+                <label for="price" class="form-label">Price</label>
                 <input 
                 name="listing[price]" 
                 placeholder="1200" 
@@ -50,7 +50,7 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <lable for="country" class="form-label">Country</lable>
+                <label for="country" class="form-label">Country</label>
                 <input 
                 name="listing[country]" 
                 placeholder="India" 
@@ -61,7 +61,7 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <lable for="category" class="form-label">Category</lable>
+                <label for="category" class="form-label">Category</label>
                 <select class="form-select" name="listing[category]" required>
                     <option selected >Choose...</option>
                     <option value="Mountains">Mountains</option>
@@ -79,7 +79,7 @@
         </div>
 
           <div  class="mb-3">
-            <lable for="location" class="form-label">Location</lable>
+            <label for="location" class="form-label">Location</label>
             <input
              name="listing[location]" 
              placeholder="Indore, Madhya Pradesh" 

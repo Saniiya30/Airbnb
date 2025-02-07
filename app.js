@@ -13,8 +13,12 @@ const ejsMate=require("ejs-mate");
 const wrapAsync= require("./util/wrapAsync.js");
 const ExpressError= require("./util/ExpressError.js");
 const {listingSchema,reviewSchema}=require("./schema.js");
-const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
+
+// const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl=process.env.ATLASDB_URL;
+
 const session= require("express-session");
+const MongoStore = require('connect-mongo');
 const flash= require("connect-flash");
 const passport= require("passport");
 const LocalStrategy= require("passport-local");
@@ -41,10 +45,25 @@ main()
     console.log(err);
 })
 async function main(){
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 }
-const sessionOptions={      // aise likh sakte hai taaki aur koi change karna ho toh yahi kar paaye 
-    secret:"priyanshu30",
+
+
+const store= MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto:{
+        secret:process.env.SECRET,
+    },
+    touchAfter:24*3600,
+});
+
+store.on("error",()=>{
+    console.log("Error in MONGO Session Store",err);
+})
+
+const sessionOptions={          // aise likh sakte hai taaki aur koi change karna ho toh yahi kar paaye 
+    store,
+    secret:process.env.SECRET,
     resave:false,
      saveUninitialized:true,
      cookie:{

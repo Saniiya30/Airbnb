@@ -14,6 +14,12 @@ const upload=multer({storage});     //kisi ek folder me upload karwa lenge saari
 
 //yaha se saari main function utha ke controllers me daal diye hai
 //router.route ka use karenge traaki jiska same route ho usko ek hi define karenge 
+
+router.get("/")
+{
+  res.redirect("/listings");
+}
+
  router.route("/")
 .get(wrapAsync(listingController.index))//(FOR INDEX)(yaha ka sara kaam ab controllers me hoga as a backend functionalty)
 .post
